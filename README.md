@@ -1,9 +1,6 @@
 # E-Commerce-Project
 로그인, 회원가입과 상품 관리 기능을 구현한 이커머스 프로젝트입니다.
 
-
----
-
 ## 프로젝트 기능 및 설계
 
 - 회원가입 기능
@@ -48,17 +45,14 @@
 - 상품 등록자 권한 제한
   - 상품 등록자는 장바구니 담기, 조회, 삭제를 할 수 없다.
 
----
 
 ## ERD
 
 <img width="1112" alt="Image" src="https://github.com/user-attachments/assets/66ce8720-a951-4e6a-9c88-047e59ff686a" />
 
----
 
 ## Trouble Shooting
 
----
 
 ## Tech Stack
 <img src="https://img.shields.io/badge/spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white">
