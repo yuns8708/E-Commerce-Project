@@ -15,6 +15,12 @@
   - Spring Security와 Jwt Token을 사용한다.
   - 사용자는 로그아웃 할 수 있다. 로그아웃 시 장바구니에 접근할 수 없다.
 
+- 회원 탈퇴 기능
+  - 사용자는 계정을 탈퇴할 수 있다.
+  - 탈퇴 시 DB에서 정보를 직접 삭제하지 않고, is_deleted_user 필드를 true로 만들고, is_deleted_user가 true인 회원에 접근하려 할 때의 예외처리를 한다.(soft delete)
+  - 회원 탈퇴 시 회원이 올린 상품은 모두 is_deleted_product = true 처리 한다.(soft delete)
+  - 회원 탈퇴 시 회원이 담은 장바구니는 모두 삭제한다.
+
 
 - 상품 등록 기능 (SELLER)
   - 상품 등록자는 상품을 등록할 수 있다. 등록 시 상품 아이디, 상품명, 상품 가격, 상품 상세 설명, 상품 이미지, 상품 등록 시간이 필요하며 상품 아이디는 unique해야한다.
@@ -27,6 +33,8 @@
 
 - 상품 삭제 기능 (SELLER)
   - 상품 등록자는 상품을 삭제할 수 있다.
+  - 상품 삭제 시 DB에서 직접 삭제하지 않는다. 삭제 시 is_deleted_product 필드를 true로 만들고, is_deleted_product가 true인 상품에 접근하려 할 때의 예외처리를 한다.(soft delete)
+  - 삭제 시 쌓이는 데이터를 어떻게 처리할 수 있을까?
 
 
 - 등록한 상품 목록 조회 기능 (SELLER)
@@ -42,6 +50,7 @@
   - 모든 사용자는 상품 리스트를 조회할 수 있다. 상품명, 상품 가격, 상품 이미지를 조회할 수 있다.
   - 기본적으로 상품이 등록된 시간순(오름차순)으로 정렬되며, 이름순, 가격순으로 정렬할 수 있다.
   - 상품 리스트는 한 페이지당 최대 20개의 상품이 보이도록 페이징 처리한다.(JPA Pageable사용)
+  - is_deleted_product가 true인 상품은 리스트에 보이지 않게 한다.
 
 
 - 상품 상세 정보 조회 기능
@@ -55,6 +64,7 @@
 - 상품 장바구니 조회 기능 (CUSTOMER)
   - 고객은 장바구니 리스트를 조회할 수 있다. 상품명, 상품 가격, 상품 이미지를 조회할 수 있다.
   - 장바구니 목록은 장바구니를 담은 시간순(오름차순)으로 정렬한다.
+  - is_deleted_product가 true인 상품이 장바구니 리스트에 있다면 사용자에게 삭제된 상품이라는 메세지를 보낸다.
 
 
 - 상품 장바구니 삭제 기능 (CUSTOMER)
@@ -76,7 +86,7 @@
 
 ## ERD
 
-<img width="1112" alt="Image" src="https://github.com/user-attachments/assets/66ce8720-a951-4e6a-9c88-047e59ff686a" />
+<img width="1132" alt="Image" src="https://github.com/user-attachments/assets/16fe6589-2df5-40ba-a6f9-513fd4123022" />
 
 
 ## Trouble Shooting
