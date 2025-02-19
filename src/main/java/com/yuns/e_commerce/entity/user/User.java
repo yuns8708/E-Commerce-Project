@@ -4,23 +4,24 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String userId; // 유저 아이디
 
     @Column(nullable = false)
@@ -35,4 +36,14 @@ public class User {
 
     @ColumnDefault("false")
     private boolean isDeletedUser; // 회원 탈퇴 여부
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
+    }
 }
