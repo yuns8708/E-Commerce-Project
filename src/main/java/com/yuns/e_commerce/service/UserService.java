@@ -2,6 +2,8 @@ package com.yuns.e_commerce.service;
 
 import com.yuns.e_commerce.entity.user.User;
 import com.yuns.e_commerce.entity.user.UserRequestDto;
+import com.yuns.e_commerce.exception.CustomException;
+import com.yuns.e_commerce.exception.ErrorCode;
 import com.yuns.e_commerce.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ public class UserService {
     public ResponseEntity<?> register(UserRequestDto requestDto) {
         // 이미 존재하는 유저인지 확인
         if (userRepository.existsByUserId(requestDto.getUserId())) {
-            return ResponseEntity.ok("이미 존재하는 회원입니다.");
+            throw new CustomException(ErrorCode.ALREADY_EXIST_MEMBER);
         }
 
         requestDto.setPassword(this.passwordEncoder.encode(requestDto.getPassword()));
