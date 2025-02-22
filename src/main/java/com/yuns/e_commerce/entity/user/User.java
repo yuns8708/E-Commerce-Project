@@ -1,9 +1,6 @@
 package com.yuns.e_commerce.entity.user;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +27,7 @@ public class User implements UserDetails {
     private String phoneNumber; // 전화번호
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private UserType userType; // 사용자 분류 타입
 
     private LocalDateTime registeredAt; // 회원가입 시간

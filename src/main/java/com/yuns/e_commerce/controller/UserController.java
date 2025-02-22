@@ -1,6 +1,8 @@
 package com.yuns.e_commerce.controller;
 
+import com.yuns.e_commerce.entity.user.LoginRequestDto;
 import com.yuns.e_commerce.entity.user.UserRequestDto;
+import com.yuns.e_commerce.security.TokenProvider;
 import com.yuns.e_commerce.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final TokenProvider tokenProvider;
 
     // 회원가입
     @PostMapping("/signup")
@@ -24,4 +27,9 @@ public class UserController {
         return ResponseEntity.ok(userService.withdraw(userId));
     }
 
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto) {
+        return ResponseEntity.ok(userService.login(requestDto));
+    }
 }

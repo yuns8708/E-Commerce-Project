@@ -1,12 +1,18 @@
 package com.yuns.e_commerce.service;
 
+import com.yuns.e_commerce.entity.user.LoginRequestDto;
 import com.yuns.e_commerce.entity.user.User;
 import com.yuns.e_commerce.entity.user.UserRequestDto;
 import com.yuns.e_commerce.exception.CustomException;
 import com.yuns.e_commerce.exception.ErrorCode;
 import com.yuns.e_commerce.repository.UserRepository;
+import com.yuns.e_commerce.security.CustomUserDetails;
+import com.yuns.e_commerce.security.TokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +20,10 @@ import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
 
     // 회원가입
     public ResponseEntity<?> register(UserRequestDto requestDto) {
@@ -39,7 +46,7 @@ public class UserService {
 
     // 회원 탈퇴
     public ResponseEntity<?> withdraw(String userId) {
-        // 존재하는 회원인지 확인하고 찾기
+        // 존재하는 회원인지 확인
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -55,4 +62,29 @@ public class UserService {
         return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUserId(username).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        return new CustomUserDetails(user);
+    }
+
+    // 로그인
+    public String login(LoginRequestDto requestDto) {
+        User user = userRepository.findByUserId(requestDto.getUserId())
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        // 탈퇴한 회원인지 확인
+        if(user.isDeletedUser()) {
+            throw new CustomException(ErrorCode.ALREADY_DELETED_USER);
+        }
+
+        // 비밀번호 일치 확인
+        if (!passwordEncoder.matches(requestDto.getPassword(), user.getPassword())) {
+            throw new CustomException(ErrorCode.PASSWORD_UNMATCH);
+        }
+
+        // 토큰 생성
+        return tokenProvider.generateToken(requestDto.getUserId());
+    }
 }
