@@ -3,6 +3,7 @@ package com.yuns.e_commerce.service;
 import com.yuns.e_commerce.entity.user.LoginRequestDto;
 import com.yuns.e_commerce.entity.user.User;
 import com.yuns.e_commerce.entity.user.UserRequestDto;
+import com.yuns.e_commerce.entity.user.UserResponseDto;
 import com.yuns.e_commerce.exception.CustomException;
 import com.yuns.e_commerce.exception.ErrorCode;
 import com.yuns.e_commerce.repository.UserRepository;
@@ -46,9 +47,7 @@ public class UserService implements UserDetailsService {
 
     // 회원 탈퇴
     public ResponseEntity<?> withdraw(String userId) {
-        // 존재하는 회원인지 확인
-        User user = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = findUserByUserId(userId);
 
         // 이미 탈퇴한 회원인지 확인
         if (user.isDeletedUser()) {
@@ -65,14 +64,13 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUserId(username).orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = findUserByUserId(username);
         return new CustomUserDetails(user);
     }
 
     // 로그인
     public String login(LoginRequestDto requestDto) {
-        User user = userRepository.findByUserId(requestDto.getUserId())
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = findUserByUserId(requestDto.getUserId());
 
         // 탈퇴한 회원인지 확인
         if(user.isDeletedUser()) {
@@ -86,5 +84,17 @@ public class UserService implements UserDetailsService {
 
         // 토큰 생성
         return tokenProvider.generateToken(requestDto.getUserId());
+    }
+
+    // 회원 정보 보기
+    public UserResponseDto findOneUser(String userId) {
+        User user = findUserByUserId(userId);
+        return new UserResponseDto(user);
+    }
+
+    // userId로 회원찾기
+    private User findUserByUserId(String userId) {
+        return userRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
 }
