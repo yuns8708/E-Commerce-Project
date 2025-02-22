@@ -33,11 +33,9 @@ public class UserService implements UserDetailsService {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USER);
         }
 
-        requestDto.setPassword(this.passwordEncoder.encode(requestDto.getPassword()));
-
         userRepository.save(User.builder()
                         .userId(requestDto.getUserId())
-                        .password(requestDto.getPassword())
+                        .password(passwordEncoder.encode(requestDto.getPassword()))
                         .phoneNumber(requestDto.getPhoneNumber())
                         .registeredAt(LocalDateTime.now())
                         .userType(requestDto.getUserType())

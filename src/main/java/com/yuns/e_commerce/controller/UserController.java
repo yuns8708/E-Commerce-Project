@@ -4,6 +4,7 @@ import com.yuns.e_commerce.entity.user.LoginRequestDto;
 import com.yuns.e_commerce.entity.user.UserRequestDto;
 import com.yuns.e_commerce.entity.user.UserResponseDto;
 import com.yuns.e_commerce.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,8 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody UserRequestDto request) {
+    public ResponseEntity<?> signup(@RequestBody @Valid UserRequestDto request) {
+        System.out.println(request.getPassword());
         return ResponseEntity.ok(userService.register(request));
     }
 
