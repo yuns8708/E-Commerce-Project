@@ -1,16 +1,15 @@
 package com.yuns.e_commerce.service;
 
 import com.yuns.e_commerce.dto.LoginRequestDto;
-import com.yuns.e_commerce.entity.User;
 import com.yuns.e_commerce.dto.UserRequestDto;
 import com.yuns.e_commerce.dto.UserResponseDto;
+import com.yuns.e_commerce.entity.User;
 import com.yuns.e_commerce.exception.CustomException;
 import com.yuns.e_commerce.exception.ErrorCode;
 import com.yuns.e_commerce.repository.UserRepository;
 import com.yuns.e_commerce.security.CustomUserDetails;
 import com.yuns.e_commerce.security.TokenProvider;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,7 +26,7 @@ public class UserService implements UserDetailsService {
     private final TokenProvider tokenProvider;
 
     // 회원가입
-    public ResponseEntity<?> register(UserRequestDto requestDto) {
+    public void register(UserRequestDto requestDto) {
         // 이미 존재하는 회원인지 확인
         if (userRepository.existsByUserId(requestDto.getUserId())) {
             throw new CustomException(ErrorCode.ALREADY_EXIST_USER);
@@ -40,11 +39,10 @@ public class UserService implements UserDetailsService {
                         .registeredAt(LocalDateTime.now())
                         .userType(requestDto.getUserType())
                 .build());
-        return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
     // 회원 탈퇴
-    public ResponseEntity<?> withdraw(String userId) {
+    public void withdraw(String userId) {
         User user = findUserByUserId(userId);
 
         // 이미 탈퇴한 회원인지 확인
@@ -56,7 +54,6 @@ public class UserService implements UserDetailsService {
         user.setDeletedUser(true);
 
         userRepository.save(user);
-        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 
 

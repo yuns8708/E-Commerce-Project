@@ -18,14 +18,14 @@ public class UserController {
     // 회원가입
     @PostMapping("/signup")
     public ResponseEntity<?> signup(@RequestBody @Valid UserRequestDto request) {
-        System.out.println(request.getPassword());
-        return ResponseEntity.ok(userService.register(request));
+        userService.register(request);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
     // 회원 탈퇴
     @PostMapping("/withdraw/{userId}")
     public ResponseEntity<?> withdraw(@PathVariable String userId) {
-        return ResponseEntity.ok(userService.withdraw(userId));
+        return ResponseEntity.ok("회원 탈퇴가 완료되었습니다.");
     }
 
     // 로그인
