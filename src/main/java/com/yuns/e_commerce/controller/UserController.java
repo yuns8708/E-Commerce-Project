@@ -1,8 +1,8 @@
 package com.yuns.e_commerce.controller;
 
-import com.yuns.e_commerce.entity.user.LoginRequestDto;
-import com.yuns.e_commerce.entity.user.UserRequestDto;
-import com.yuns.e_commerce.entity.user.UserResponseDto;
+import com.yuns.e_commerce.dto.LoginRequestDto;
+import com.yuns.e_commerce.dto.UserRequestDto;
+import com.yuns.e_commerce.dto.UserResponseDto;
 import com.yuns.e_commerce.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

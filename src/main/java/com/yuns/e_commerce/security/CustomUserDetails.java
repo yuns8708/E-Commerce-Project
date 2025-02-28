@@ -1,6 +1,6 @@
 package com.yuns.e_commerce.security;
 
-import com.yuns.e_commerce.entity.user.User;
+import com.yuns.e_commerce.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;

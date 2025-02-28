@@ -1,9 +1,9 @@
 package com.yuns.e_commerce.service;
 
-import com.yuns.e_commerce.entity.user.LoginRequestDto;
-import com.yuns.e_commerce.entity.user.User;
-import com.yuns.e_commerce.entity.user.UserRequestDto;
-import com.yuns.e_commerce.entity.user.UserResponseDto;
+import com.yuns.e_commerce.dto.LoginRequestDto;
+import com.yuns.e_commerce.entity.User;
+import com.yuns.e_commerce.dto.UserRequestDto;
+import com.yuns.e_commerce.dto.UserResponseDto;
 import com.yuns.e_commerce.exception.CustomException;
 import com.yuns.e_commerce.exception.ErrorCode;
 import com.yuns.e_commerce.repository.UserRepository;
