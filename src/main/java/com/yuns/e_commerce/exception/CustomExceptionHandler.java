@@ -10,6 +10,8 @@ public class CustomExceptionHandler {
     public CustomExceptionResponse handleException (CustomException e, HttpServletRequest request) {
         return CustomExceptionResponse.builder()
                 .errorCode(e.getErrorCode())
+                .status(e.getStatus())
+                .code(e.getStatus().value())
                 .errorMessage(e.getErrorMessage())
                 .build();
     }
