@@ -30,7 +30,7 @@ public class UserController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequestDto requestDto) {
+    public ResponseEntity<?> login(@RequestBody @Valid  LoginRequestDto requestDto) {
         return ResponseEntity.ok(userService.login(requestDto));
     }
 
