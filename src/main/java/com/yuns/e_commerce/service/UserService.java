@@ -8,7 +8,6 @@ import com.yuns.e_commerce.exception.CustomException;
 import com.yuns.e_commerce.exception.ErrorCode;
 import com.yuns.e_commerce.repository.UserRepository;
 import com.yuns.e_commerce.security.CustomUserDetails;
-import com.yuns.e_commerce.security.TokenProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,8 +22,6 @@ import java.time.LocalDateTime;
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final TokenProvider tokenProvider;
-
     // 회원가입
     public void register(UserRequestDto requestDto) {
         // 이미 존재하는 회원인지 확인
@@ -42,18 +39,22 @@ public class UserService implements UserDetailsService {
     }
 
     // 회원 탈퇴
-    public void withdraw(String userId) {
-        User user = findUserByUserId(userId);
+    public void withdraw(String userId, User user) {
+        if (!userId.equals(user.getUserId())) {
+            throw new CustomException(ErrorCode.USER_UN_MATCH);
+        }
+
+        User foundUser = findUserByUserId(userId);
 
         // 이미 탈퇴한 회원인지 확인
-        if (user.isDeletedUser()) {
+        if (foundUser.isDeletedUser()) {
             throw new CustomException(ErrorCode.ALREADY_DELETED_USER);
         }
 
         // 회원 탈퇴 여부 변경
-        user.setDeletedUser(true);
+        foundUser.setDeletedUser(true);
 
-        userRepository.save(user);
+        userRepository.save(foundUser);
     }
 
 
@@ -64,7 +65,7 @@ public class UserService implements UserDetailsService {
     }
 
     // 로그인
-    public String login(LoginRequestDto requestDto) {
+    public User login(LoginRequestDto requestDto) {
         User user = findUserByUserId(requestDto.getUserId());
 
         // 탈퇴한 회원인지 확인
@@ -78,7 +79,7 @@ public class UserService implements UserDetailsService {
         }
 
         // 토큰 생성
-        return tokenProvider.generateToken(requestDto.getUserId());
+        return user;
     }
 
     // 회원 정보 보기
