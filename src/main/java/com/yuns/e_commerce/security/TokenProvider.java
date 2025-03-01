@@ -31,7 +31,6 @@ public class TokenProvider {
     // 토큰 생성
     public String generateToken(String userId) {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-        System.out.println(secretKey);
         return Jwts.builder()
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + TOKEN_VALID))
@@ -58,8 +57,6 @@ public class TokenProvider {
 
     private Claims parseClaims(String token) {
         try {
-
-            System.out.println(secretKey.getBytes());
             return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         } catch (ExpiredJwtException e) {
             return e.getClaims();
