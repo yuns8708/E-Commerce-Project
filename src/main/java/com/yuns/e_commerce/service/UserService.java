@@ -64,7 +64,7 @@ public class UserService implements UserDetailsService {
     }
 
     // 로그인
-    public User login(LoginRequestDto requestDto) {
+    public String login(LoginRequestDto requestDto) {
         User user = findUserByUserId(requestDto.getUserId());
 
         // 탈퇴한 회원인지 확인
@@ -77,8 +77,7 @@ public class UserService implements UserDetailsService {
             throw new CustomException(ErrorCode.PASSWORD_UNMATCH);
         }
 
-        // 토큰 생성
-        return user;
+        return user.getUserId();
     }
 
     // 회원 정보 보기

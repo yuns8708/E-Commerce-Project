@@ -36,7 +36,9 @@ public class UserController {
     // 로그인
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody @Valid  LoginRequestDto requestDto) {
-        return ResponseEntity.ok(tokenProvider.generateToken(requestDto.getUserId()));
+        return ResponseEntity.ok(
+                tokenProvider.generateToken(userService.login(requestDto))
+        );
     }
 
     // 회원 정보 보기
